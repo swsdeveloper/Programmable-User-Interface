@@ -36,6 +36,10 @@
 		0AB41FF71A6E21FB0078F5F3 /* Lemon.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AB41FF61A6E21FB0078F5F3 /* Lemon.png */; };
 		0AB41FF91A6E22200078F5F3 /* LionCub.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0AB41FF81A6E22200078F5F3 /* LionCub.jpg */; };
 		0AB41FFB1A6E223B0078F5F3 /* Tiger2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 0AB41FFA1A6E223B0078F5F3 /* Tiger2.jpg */; };
+		0AB41FFD1A6E27950078F5F3 /* ButtonPress.wav in Resources */ = {isa = PBXBuildFile; fileRef = 0AB41FFC1A6E27950078F5F3 /* ButtonPress.wav */; };
+		0AB420001A6E28C10078F5F3 /* ImageHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AB41FFF1A6E28C10078F5F3 /* ImageHandler.m */; };
+		0AB420031A6E2C780078F5F3 /* AudioHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AB420021A6E2C780078F5F3 /* AudioHandler.m */; };
+		0AB420061A6E31A90078F5F3 /* ButtonHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AB420051A6E31A90078F5F3 /* ButtonHandler.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -88,6 +92,13 @@
 		0AB41FF61A6E21FB0078F5F3 /* Lemon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Lemon.png; sourceTree = "<group>"; };
 		0AB41FF81A6E22200078F5F3 /* LionCub.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = LionCub.jpg; sourceTree = "<group>"; };
 		0AB41FFA1A6E223B0078F5F3 /* Tiger2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Tiger2.jpg; sourceTree = "<group>"; };
+		0AB41FFC1A6E27950078F5F3 /* ButtonPress.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = ButtonPress.wav; sourceTree = "<group>"; };
+		0AB41FFE1A6E28C10078F5F3 /* ImageHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageHandler.h; sourceTree = "<group>"; };
+		0AB41FFF1A6E28C10078F5F3 /* ImageHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageHandler.m; sourceTree = "<group>"; };
+		0AB420011A6E2C780078F5F3 /* AudioHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioHandler.h; sourceTree = "<group>"; };
+		0AB420021A6E2C780078F5F3 /* AudioHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioHandler.m; sourceTree = "<group>"; };
+		0AB420041A6E31A90078F5F3 /* ButtonHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ButtonHandler.h; sourceTree = "<group>"; };
+		0AB420051A6E31A90078F5F3 /* ButtonHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ButtonHandler.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,6 +149,12 @@
 				0A33C9E11A69AF6E000B2BFA /* MyViewController.m */,
 				0A33CA081A6B23D0000B2BFA /* Box.h */,
 				0A33CA091A6B23D0000B2BFA /* Box.m */,
+				0AB420041A6E31A90078F5F3 /* ButtonHandler.h */,
+				0AB420051A6E31A90078F5F3 /* ButtonHandler.m */,
+				0AB41FFE1A6E28C10078F5F3 /* ImageHandler.h */,
+				0AB41FFF1A6E28C10078F5F3 /* ImageHandler.m */,
+				0AB420011A6E2C780078F5F3 /* AudioHandler.h */,
+				0AB420021A6E2C780078F5F3 /* AudioHandler.m */,
 				0AB41FE61A6CD9410078F5F3 /* CoolButton.h */,
 				0AB41FE71A6CD9410078F5F3 /* CoolButton.m */,
 				0A33C9E61A69AF6E000B2BFA /* Images.xcassets */,
@@ -203,8 +220,9 @@
 		0A33CB6D1A6B8DC9000B2BFA /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
-				0A33CA0B1A6B619E000B2BFA /* Scream.wav */,
+				0AB41FFC1A6E27950078F5F3 /* ButtonPress.wav */,
 				0A33CA111A6B80A7000B2BFA /* Machinery.wav */,
+				0A33CA0B1A6B619E000B2BFA /* Scream.wav */,
 			);
 			name = Sounds;
 			sourceTree = "<group>";
@@ -296,6 +314,7 @@
 				0A33CB051A6B8BBF000B2BFA /* Monks.JPG in Resources */,
 				0AB41FF11A6E21510078F5F3 /* Einstein.jpg in Resources */,
 				0A33CA001A69B17B000B2BFA /* View.xib in Resources */,
+				0AB41FFD1A6E27950078F5F3 /* ButtonPress.wav in Resources */,
 				0A33CB631A6B8BBF000B2BFA /* Monkey.JPG in Resources */,
 				0AB41FF71A6E21FB0078F5F3 /* Lemon.png in Resources */,
 				0A33CB601A6B8BBF000B2BFA /* Shiva.JPG in Resources */,
@@ -329,10 +348,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				0AB41FEA1A6CD9410078F5F3 /* CoolButton.m in Sources */,
+				0AB420031A6E2C780078F5F3 /* AudioHandler.m in Sources */,
 				0A33C9E21A69AF6E000B2BFA /* MyViewController.m in Sources */,
 				0A33CA0A1A6B23D0000B2BFA /* Box.m in Sources */,
 				0A33C9DF1A69AF6E000B2BFA /* AppDelegate.m in Sources */,
 				0A33C9DC1A69AF6E000B2BFA /* main.m in Sources */,
+				0AB420061A6E31A90078F5F3 /* ButtonHandler.m in Sources */,
+				0AB420001A6E28C10078F5F3 /* ImageHandler.m in Sources */,
 				0AB41FEB1A6CD9410078F5F3 /* RayWCommon.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

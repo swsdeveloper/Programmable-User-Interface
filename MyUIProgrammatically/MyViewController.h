@@ -40,6 +40,7 @@
 
 @property (strong, nonatomic) AVAudioPlayer *audioPlayer1;
 @property (strong, nonatomic) AVAudioPlayer *audioPlayer2;
+@property (strong, nonatomic) AVAudioPlayer *audioPlayer3;
 
 @end
 

@@ -7,8 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ImageHandler.h"
+
 
 @interface Box : UIView
+
+@property (strong, nonatomic) ImageHandler *myImageHandler;
 
 @property (strong, nonatomic) UIImage *image;
 

@@ -7,8 +7,9 @@
 //
 
 #import "MyViewController.h"
-#import <QuartzCore/QuartzCore.h>   // for flashing button
 #import "Constants.h"
+#import "AudioHandler.h"
+#import "ButtonHandler.h"
 
 
 @interface MyViewController ()
@@ -44,15 +45,25 @@
         //self.view.alpha = 0.0;  // un-comment this to see the window's color
     }
     
-    numberOfPositions = 9;      // Number of positions we support (see position enum in *.h)
+    numberOfPositions = 9;      // Number of box positions we support (see position enum in *.h)
     
-    countRotations = 0;         // We will auto swap all photos on every 4th rotation
+    countRotations = 0;         // We will auto swap all current photos on every 4th rotation
         
     [self setUpAudioPlayers];
     
     self.view.backgroundColor = [UIColor orangeColor];
     
-    [self createStartButton];
+    if (!self.startButton) {
+        ButtonHandler *myButtonHandler = [[ButtonHandler alloc] init];
+        
+        self.startButton = [myButtonHandler createStartButton];
+        
+        [self.startButton addTarget:self action:@selector(startButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        
+        [self.view addSubview:self.startButton];
+        
+        [self performSelector:@selector(makeStartButtonFlash) withObject:self afterDelay:5.0];    // delay 5 seconds
+    }
 }
 
 - (void)displayDeviceOrientation {
@@ -141,7 +152,6 @@
 }
 
 - (void)positionAllBoxes {
-
     int i = upperLeft; // use i to enumerate through all possible positions. There are as many boxes as there are different positions to put them in.
 
     for (Box *box in self.boxes) {
@@ -238,43 +248,15 @@
     box.frame = CGRectMake(boxX, boxY, boxWidth, boxHeight);
 }
 
-- (void)createStartButton {
-    
-    // Create the button and assign an action to it. Don't position it, yet
-    
-    self.startButton = [[CoolButton alloc] init];
-    
-    self.startButton.frame = CGRectMake(0, 0, 200, 40); // set button's width (200) and height (40)
-    
-    self.startButton.hue = 0.625000;        // 0.625000 = navy blue; 0.837329 = magenta
-    self.startButton.saturation = 1.000000;
-    self.startButton.brightness = 1.000000;
-    
-    [self.startButton setTitle:@"Press Me" forState:UIControlStateNormal];
-    [self.startButton addTarget:self action:@selector(startButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    
-    [self.view addSubview:self.startButton];
-    
-    [self performSelector:@selector(makeStartButtonFlash) withObject:self afterDelay:5.0];    // delay 5 seconds
-}
-
 - (void)makeStartButtonFlash {
-    if (!self.startButton) {
-        return;
+    if (self.startButton) {
+        
+        ButtonHandler *myButtonHandler = [[ButtonHandler alloc] init];
+        
+        [myButtonHandler addScaleAnimationToButton:self.startButton];
+        
+        [self performSelector:@selector(makeStartButtonFlash) withObject:self afterDelay:3.0];    // delay 3 seconds
     }
-    
-    CABasicAnimation *theAnimation;
-//    theAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
-    theAnimation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
-    theAnimation.duration = 0.1;
-    theAnimation.repeatCount = 3;
-    theAnimation.autoreverses = YES;
-    theAnimation.fromValue = [NSNumber numberWithFloat:1.0];
-    theAnimation.toValue = [NSNumber numberWithFloat:0.0];
-//    [self.startButton.layer addAnimation:theAnimation forKey:@"animateOpacity"];
-    [self.startButton.layer addAnimation:theAnimation forKey:@"animateTransform.scale"];
-    
-    [self performSelector:@selector(makeStartButtonFlash) withObject:self afterDelay:3.0];    // delay 3 seconds
 }
 
 - (IBAction)startButtonPressed:(id)sender  {
@@ -295,7 +277,34 @@
     
     [self createDeviceOrientationLabel];
     
-    [self createResetButton];
+    if (!self.resetButton) {
+        ButtonHandler *myButtonHandler = [[ButtonHandler alloc] init];
+        
+        self.resetButton = [myButtonHandler createResetButton];
+        
+        [self.resetButton addTarget:self action:@selector(resetButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+
+        [self.view addSubview:self.resetButton];
+    }
+}
+
+- (IBAction)resetButtonPressed:(id)sender  {
+    
+    if (self.audioPlayer3) {
+        [self.audioPlayer3 play];
+    }
+    
+    countRotations = 0;
+    
+    for (Box *box in self.boxes) {
+        [box removeFromSuperview];
+    }
+    
+    [self generateBoxes];
+    
+    for (Box *box in self.boxes) {
+        [self.view addSubview:box];
+    }
 }
 
 - (void)generateBoxes {
@@ -339,78 +348,19 @@
     [self.view addSubview:self.orientationLabel];
 }
 
-- (void)createResetButton {
-    
-    if (self.resetButton) {
-        return;
-    }
-    
-    // Create the button and assign an action to it. Don't position it, yet
-    
-    self.resetButton = [[CoolButton alloc] init];
-    
-    self.resetButton.frame = CGRectMake(0, 0, 200, 40); // set button's width (200) and height (40)
-    
-    self.resetButton.hue = 0.837329;        // 0.625000 = navy blue; 0.837329 = magenta
-    self.resetButton.saturation = 1.000000;
-    self.resetButton.brightness = 1.000000;
-    
-    [self.resetButton setTitle:@"Reset" forState:UIControlStateNormal];
-    [self.resetButton addTarget:self action:@selector(resetButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    
-    [self.view addSubview:self.resetButton];
-}
-
-- (IBAction)resetButtonPressed:(id)sender  {
-    
-    countRotations = 0;
-    
-    for (Box *box in self.boxes) {
-        [box removeFromSuperview];
-    }
-    
-    [self generateBoxes];
-    
-    for (Box *box in self.boxes) {
-        [self.view addSubview:box];
-    }
-}
-
 - (CGFloat)genRandomBoxSize {
     int maxSize = (self.view.frame.size.width < self.view.frame.size.height) ? (int)(self.view.frame.size.width / 3.0) : (int)(self.view.frame.size.height / 3.0);
     int minSize = (self.view.frame.size.width < self.view.frame.size.height) ? (int)(self.view.frame.size.width / 4.0) : (int)(self.view.frame.size.height / 4.0);
     CGFloat boxSize = (CGFloat)arc4random_uniform((maxSize-minSize)+1) + minSize;    // return size between min and max (eg: arc4random_uniform(271)+80 -> 80-350)
-    
     // NSLog(@"boxSize = %f", boxSize);
     return boxSize;
 }
 
 - (void)setUpAudioPlayers {
-    NSString *soundFilePath1 = [[NSBundle mainBundle] pathForResource: @"Scream" ofType: @"wav"];
-    NSURL *soundFileURL1 = [[NSURL alloc] initFileURLWithPath: soundFilePath1];
-    NSError *error1 = nil;
-    self.audioPlayer1 = [[AVAudioPlayer alloc] initWithContentsOfURL: soundFileURL1 error: &error1];
-    if (!error1) {
-        [self.audioPlayer1 setVolume:0.5];
-        [self.audioPlayer1 prepareToPlay];
-    } else {
-        self.audioPlayer1 = nil;
-        NSLog(@"Error in creating audio player:%@",[error1 description]);
-    }
-    
-    NSString *soundFilePath2 = [[NSBundle mainBundle] pathForResource: @"Machinery" ofType: @"wav"];
-    NSURL *soundFileURL2 = [[NSURL alloc] initFileURLWithPath: soundFilePath2];
-    NSError *error2 = nil;
-    self.audioPlayer2 = [[AVAudioPlayer alloc] initWithContentsOfURL: soundFileURL2 error: &error2];
-    if (!error2) {
-        [self.audioPlayer2 setVolume:1.0];
-        self.audioPlayer2.enableRate = YES;
-        self.audioPlayer2.rate = 2.0;
-        [self.audioPlayer2 prepareToPlay];
-    } else {
-        self.audioPlayer2 = nil;
-        NSLog(@"Error in creating audio player:%@",[error2 description]);
-    }
+    AudioHandler *myAudioHandler = [[AudioHandler alloc] init];
+    self.audioPlayer1 = [myAudioHandler setupAudioPlayer1];
+    self.audioPlayer2 = [myAudioHandler setupAudioPlayer2];
+    self.audioPlayer3 = [myAudioHandler setupAudioPlayer3];
 }
 
 - (void)didReceiveMemoryWarning {
