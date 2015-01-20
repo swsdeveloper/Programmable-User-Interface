@@ -12,7 +12,7 @@
 #import "CoolButton.h"
 
 
-@interface MyViewController : UIViewController {
+@interface MyViewController : UIViewController  <UIGestureRecognizerDelegate> {
     
     enum position {
         upperLeft,

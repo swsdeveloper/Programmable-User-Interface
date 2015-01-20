@@ -311,6 +311,16 @@
     
     for (int i=0; i < numberOfPositions; i++) {
         self.boxes[i] = [[Box alloc] initWithSize:[self genRandomBoxSize]];
+        
+        // If user taps on box, trigger a method to change that box's image
+        
+        [self.boxes[i] setUserInteractionEnabled:YES];
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(boxTapped:)];
+        [tap cancelsTouchesInView];
+        [tap setNumberOfTouchesRequired:1];
+        [tap setNumberOfTapsRequired:1];
+        tap.delegate = self;
+        [self.boxes[i] addGestureRecognizer:tap];
     }
     
     // Replace the above for loop with the following stmts - for controlled size testing:
@@ -328,6 +338,12 @@
     // NSLog(@"boxes[0] frame: w:%f, h:%f", self.boxes[0].frame.size.width, self.boxes[0].frame.size.height);
     
     // Boxes have no position when created. Positions are set in viewWillLayoutSubviews
+}
+
+- (void)boxTapped:(UIGestureRecognizer *)gestureRecognizer {
+    Box *box = (Box *)gestureRecognizer.view;
+    [box changeImage];
+    countRotations = 0;
 }
 
 - (void)createDeviceOrientationLabel {

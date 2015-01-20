@@ -14,8 +14,8 @@
 
 - (CoolButton *)createStartButton;
 
-- (void)addScaleAnimationToButton:(CoolButton *)button;
-
 - (CoolButton *)createResetButton;
+
+- (void)addScaleAnimationToButton:(CoolButton *)button;
 
 @end
